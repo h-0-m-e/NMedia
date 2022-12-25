@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">NMedia</string>
+    <string name="text_to_print">NMedia!</string>
+    <string name="switch_do_nothing">Do nothing, hehe</string>
+    <string name="sorry_msg">sorry, i dunno how to use da switch yet :(</string>
+</resources>
