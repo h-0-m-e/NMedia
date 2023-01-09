@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">НМедиа</string>
+    <string name="text_to_print" translatable="true">НМедиа!</string>
+    <string name="switch_do_nothing" translatable="true">Бесполезно, хах</string>
+    <string name="sorry_msg" translatable="true">извините, я пока не знаю как использовать переключатель :(</string>
+</resources>
