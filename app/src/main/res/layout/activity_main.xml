@@ -74,7 +74,16 @@
         android:layout_marginTop="@dimen/common_dimen"
         android:layout_marginEnd="@dimen/common_dimen"
         android:layout_marginBottom="@dimen/common_dimen"
-        tools:text="Тестовый текст поста"
+        tools:text="Тестовый текст постафабричный метод
+абстрактная фабрика
+builder - строитель
+синглтон
+ленивая инициализация
+адаптер
+команда
+итератор
+observer - наблюдатель
+состояние (машина состояния)"
         app:layout_constraintBottom_toTopOf="@id/TextBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
