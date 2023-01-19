@@ -2,8 +2,9 @@ package ru.netology.nmedia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.viewModels
 import ru.netology.nmedia.databinding.ActivityMainBinding
+import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,45 +12,25 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val post = Post(
-            id = 1,
-            author = "Нетология. Интернет-университет который смог",
-            content = "Всем привет, меня зовут Саша, я диктор канала «Мастерская Настроения»",
-            published = "14 января в 22:32",
-            likedByMe = false,
-            likes = 996,
-            shares = 9999
-        )
-        binding.apply {
-            nickname.text = post.author
-            published.text = post.published
-            postText.text = post.content
-
-            if (post.likedByMe) {
-                likesButton.setImageResource(R.drawable.ic_liked_24)
-            }
-
-            likesCount.text = countShorting(post.likes)
-            shareCount.text = countShorting(post.shares)
-
-            likesButton.setOnClickListener {
-                Log.d("stuff", "Like")
-                post.likedByMe = !post.likedByMe
+        val viewModel: PostViewModel by viewModels()
+        viewModel.data.observe(this) {post ->
+            binding.apply {
+                nickname.text = post.author
+                published.text = post.published
+                postText.text = post.content
+                likesCount.text = countShorting(post.likes)
+                shareCount.text = countShorting(post.shares)
                 likesButton.setImageResource(
-                    if (post.likedByMe) R.drawable.ic_liked_24
+                    if(post.likedByMe) R.drawable.ic_liked_24
                     else R.drawable.ic_baseline_favorite_border_24
                 )
-
-                if (post.likedByMe) post.likes++ else post.likes--
-                likesCount.text = countShorting(post.likes)
             }
-
-            shareButton.setOnClickListener {
-                Log.d("stuff", "Share")
-                post.shares++
-                shareCount.text = countShorting(post.shares)
-            }
-
+        }
+        binding.likesButton.setOnClickListener{
+            viewModel.like()
+        }
+        binding.shareButton.setOnClickListener {
+            viewModel.share()
         }
     }
 
