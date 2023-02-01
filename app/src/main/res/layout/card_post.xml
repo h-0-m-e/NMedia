@@ -27,7 +27,7 @@
         app:constraint_referenced_ids="postAvatar" />
 
     <ImageView
-        android:id="@+id/moreButton"
+        android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_dimen"
@@ -48,7 +48,7 @@
         android:ellipsize="end"
         android:lines="1"
         app:layout_constraintBottom_toTopOf="@id/published"
-        app:layout_constraintEnd_toStartOf="@+id/moreButton"
+        app:layout_constraintEnd_toStartOf="@+id/menu"
         app:layout_constraintStart_toEndOf="@+id/postAvatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Тестовый никнейм. Тестовый никнейм. Тестовый никнейм. " />

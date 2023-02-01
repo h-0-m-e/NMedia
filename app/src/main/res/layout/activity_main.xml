@@ -1,5 +1,5 @@
 <?xml version= "1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,5 +14,123 @@
         tools:listitem="@layout/card_post">
 
     </androidx.recyclerview.widget.RecyclerView>
-</FrameLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/insertBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="content, save" />
+
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:hint="@string/type_hint"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/common_dimen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/insertBarrier" />
+
+    <ImageButton
+        android:id="@+id/save"
+        android:layout_width="@dimen/big_dimen"
+        android:layout_height="@dimen/big_dimen"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/content"
+        app:layout_constraintTop_toBottomOf="@id/insertBarrier"
+        app:srcCompat="@drawable/ic_done"
+        android:contentDescription="@string/simple_description" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/editingGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="editingBackground,editingAvatar,editingBarrier,editingContent,editingNickname,editingDeny" />
+
+    <ImageButton
+        android:id="@+id/editingBackground"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/extra_big_dimen"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/insertBarrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editingBarrier"
+        android:contentDescription="@string/simple_description"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/editingBarrier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="editingAvatar,editingBackground" />
+
+
+    <ImageView
+        android:id="@+id/editingAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_dimen"
+        android:layout_marginTop="@dimen/small_dimen"
+        android:layout_marginEnd="@dimen/small_dimen"
+        android:layout_marginBottom="@dimen/small_dimen"
+        app:layout_constraintBottom_toTopOf="@id/insertBarrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editingBarrier"
+        tools:srcCompat="@drawable/post_avatar"
+        android:contentDescription="@string/simple_description"/>
+
+    <TextView
+        android:id="@+id/editingNickname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_dimen"
+        android:layout_marginTop="@dimen/small_dimen"
+        android:layout_marginEnd="@dimen/medium_dimen"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@id/editingContent"
+        app:layout_constraintEnd_toStartOf="@+id/editingDeny"
+        app:layout_constraintStart_toEndOf="@+id/editingAvatar"
+        app:layout_constraintTop_toBottomOf="@id/editingBarrier"
+        tools:text="Тестовый никнейм. Тестовый никнейм. Тестовый никнейм. " />
+
+    <TextView
+        android:id="@+id/editingContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_dimen"
+        android:layout_marginTop="@dimen/small_dimen"
+        android:layout_marginEnd="@dimen/medium_dimen"
+        android:layout_marginBottom="@dimen/small_dimen"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@id/insertBarrier"
+        app:layout_constraintEnd_toStartOf="@id/editingDeny"
+        app:layout_constraintStart_toEndOf="@+id/editingAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/editingNickname"
+        tools:text="Тестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текст" />
+
+    <ImageView
+        android:id="@+id/editingDeny"
+        android:layout_width="@dimen/medium_dimen"
+        android:layout_height="@dimen/medium_dimen"
+        android:layout_marginStart="@dimen/small_dimen"
+        android:layout_marginTop="@dimen/small_dimen"
+        android:layout_marginBottom="@dimen/small_dimen"
+        android:contentDescription="@string/simple_description"
+        app:layout_constraintBottom_toTopOf="@id/insertBarrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editingBarrier"
+        app:srcCompat="@drawable/ic_deny_24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
