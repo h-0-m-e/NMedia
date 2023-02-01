@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">NMedia</string>
     <string name="simple_description">Something missing here…</string>
+    <string name="type_hint">Enter the text…</string>
+    <string name="edit_button">Edit</string>
+    <string name="remove_button">Remove</string>
+    <string name="empty_content_warning">Content can\'t be empty</string>
+
 </resources>

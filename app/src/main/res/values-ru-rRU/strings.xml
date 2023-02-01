@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">НМедиа</string>
     <string name="simple_description">Тут чего-то нехватает…</string>
+    <string name="type_hint">Введите текст…</string>
+    <string name="edit_button">Изменить</string>
+    <string name="remove_button">Удалить</string>
+    <string name="empty_content_warning">Контент не может быть пустым</string>
 </resources>

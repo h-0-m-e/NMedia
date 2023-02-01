@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class PostRepositoryInMemoryImpl : PostRepository {
+
+    private var nextId = 1L
+
     private var posts = listOf(
         Post(
-            id = 7,
+            id = nextId++,
             author = "Нетология. Интернет-университет который смог",
             content = "Как сдавать задачи:\n" +
                     "1. Откройте ваш проект из предыдущего ДЗ.\n" +
@@ -18,10 +21,11 @@ class PostRepositoryInMemoryImpl : PostRepository {
             published = "24 января в 16:42",
             likedByMe = false,
             likes = 95,
-            shares = 8
+            shares = 8,
+            views = 298
         ),
         Post(
-            id = 6,
+            id = nextId++,
             author = "Нетология. Интернет-университет который смог",
             content = "Решитесь на большее!\n" + "\n" +
                     "Вам есть что показать этому миру. Позвольте себе ставить большие цели, а" +
@@ -29,10 +33,11 @@ class PostRepositoryInMemoryImpl : PostRepository {
             published = "21 января в 12:31",
             likedByMe = false,
             likes = 12,
-            shares = 1
+            shares = 1,
+            views = 128
         ),
         Post(
-            id = 5,
+            id = nextId++,
             author = "Нетология. Интернет-университет который смог",
             content = "Выберите вектор развития!\n" + "\n" +
                     "С нами вы можете получить новую профессию, освоить навыки для развития " +
@@ -41,10 +46,11 @@ class PostRepositoryInMemoryImpl : PostRepository {
             published = "20 января в 14:24",
             likedByMe = false,
             likes = 64,
-            shares = 0
+            shares = 0,
+            views = 210
         ),
         Post(
-            id = 4,
+            id = nextId++,
             author = "Нетология. Интернет-университет который смог",
             content = "Мы создали комфортную среду обучения, чтобы у вас всегда была мотивация" +
                     " двигаться вперёд.\n" +
@@ -52,35 +58,39 @@ class PostRepositoryInMemoryImpl : PostRepository {
             published = "18 января в 21:02",
             likedByMe = false,
             likes = 71,
-            shares = 4
+            shares = 4,
+            views = 249
         ),
         Post(
-            id = 3,
+            id = nextId++,
             author = "Нетология. Интернет-университет который смог",
             content = "Присоединяйтесь к тем, кто уже встал на путь роста: делитесь открытиями," +
                     " обменивайтесь опытом, вдохновляйтесь и получайте поддержку единомышленников",
             published = "16 января в 21:32",
             likedByMe = false,
             likes = 9,
-            shares = 1
+            shares = 1,
+            views = 19
         ),
         Post(
-            id = 2,
+            id = nextId++,
             author = "Нетология. Интернет-университет который смог",
             content = "Всем привет, меня зовут Саша, я диктор канала «Мастерская Настроения»",
             published = "15 января в 02:32",
             likedByMe = false,
             likes = 96,
-            shares = 9
+            shares = 9,
+            views = 170
         ),
         Post(
-            id = 1,
+            id = nextId++,
             author = "Нетология. Интернет-университет который смог",
             content = "Всем привет, меня зовут Саша",
             published = "14 января в 22:32",
             likedByMe = false,
             likes = 996,
-            shares = 99
+            shares = 99,
+            views = 1498
         )
     )
     private val data = MutableLiveData(posts)
@@ -102,6 +112,33 @@ class PostRepositoryInMemoryImpl : PostRepository {
                 shares = it.shares + 1
             )
         }
+        data.value = posts
+    }
+
+    override fun save(post: Post) {
+        if (post.id == 0L) {
+
+
+            posts = listOf(
+                post.copy(
+                    id = nextId++,
+                    author = "Me",
+                    likedByMe = false,
+                    published = "now"
+                )
+            ) + posts
+            data.value = posts
+            return
+        }
+
+        posts = posts.map {
+            if (it.id != post.id) it else it.copy(content = post.content)
+        }
+        data.value = posts
+    }
+
+    override fun removeById(id: Long) {
+        posts = posts.filter { it.id != id }
         data.value = posts
     }
 }
