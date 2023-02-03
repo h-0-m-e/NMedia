@@ -20,6 +20,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
                     " на получение зачёта. В этом ДЗ все задачи обязательные.",
             published = "24 января в 16:42",
             likedByMe = false,
+            sharedByMe = false,
             likes = 95,
             shares = 8,
             views = 298
@@ -32,6 +33,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
                     " навыки и знания дадим мы. Для этого у нас есть все инструменты.",
             published = "21 января в 12:31",
             likedByMe = false,
+            sharedByMe = false,
             likes = 12,
             shares = 1,
             views = 128
@@ -45,6 +47,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
                     "более 80 программ.",
             published = "20 января в 14:24",
             likedByMe = false,
+            sharedByMe = false,
             likes = 64,
             shares = 0,
             views = 210
@@ -57,6 +60,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
                     "Учитесь, практикуйтесь и применяйте знания сразу в работе.",
             published = "18 января в 21:02",
             likedByMe = false,
+            sharedByMe = false,
             likes = 71,
             shares = 4,
             views = 249
@@ -68,6 +72,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
                     " обменивайтесь опытом, вдохновляйтесь и получайте поддержку единомышленников",
             published = "16 января в 21:32",
             likedByMe = false,
+            sharedByMe = false,
             likes = 9,
             shares = 1,
             views = 19
@@ -78,6 +83,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
             content = "Всем привет, меня зовут Саша, я диктор канала «Мастерская Настроения»",
             published = "15 января в 02:32",
             likedByMe = false,
+            sharedByMe = false,
             likes = 96,
             shares = 9,
             views = 170
@@ -88,6 +94,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
             content = "Всем привет, меня зовут Саша",
             published = "14 января в 22:32",
             likedByMe = false,
+            sharedByMe = false,
             likes = 996,
             shares = 99,
             views = 1498
@@ -109,7 +116,8 @@ class PostRepositoryInMemoryImpl : PostRepository {
     override fun shareById(id: Long) {
         posts = posts.map {
             if (it.id != id) it else it.copy(
-                shares = it.shares + 1
+                shares = it.shares + 1,
+                sharedByMe = true
             )
         }
         data.value = posts
@@ -124,6 +132,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
                     id = nextId++,
                     author = "Me",
                     likedByMe = false,
+                    sharedByMe = false,
                     published = "now"
                 )
             ) + posts

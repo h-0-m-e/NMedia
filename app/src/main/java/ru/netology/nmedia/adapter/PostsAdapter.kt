@@ -46,17 +46,16 @@ class PostViewHolder(
             nickname.text = post.author
             published.text = post.published
             postText.text = post.content
-            likesCount.text = countOperator.shortingByLetters(post.likes)
-            shareCount.text = countOperator.shortingByLetters(post.shares)
-            viewsCount.text = countOperator.shortingByLetters(post.views)
-            likesButton.setImageResource(
-                if (post.likedByMe) R.drawable.ic_liked_24
-                else R.drawable.ic_baseline_favorite_border_24
-            )
-            likesButton.setOnClickListener {
+            views.text = countOperator.shortingByLetters(post.views)
+            share.isChecked = post.sharedByMe
+            share.text = countOperator.shortingByLetters(post.shares)
+            like.isChecked = post.likedByMe
+            like.text = countOperator.shortingByLetters(post.likes)
+
+            like.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
-            shareButton.setOnClickListener {
+            share.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
             menu.setOnClickListener {
