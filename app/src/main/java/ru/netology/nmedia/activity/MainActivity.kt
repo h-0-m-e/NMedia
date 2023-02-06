@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                         editingNickname.text = post.author
                     }
                 }
-            } else return@observe
+            }
         }
 
         binding.editingDeny.setOnClickListener {

@@ -12,6 +12,7 @@ private val empty = Post(
     content = "",
     published = "",
     likedByMe = false,
+    sharedByMe = false,
     likes = 0,
     shares = 0,
     views = 0
@@ -37,7 +38,7 @@ class PostViewModel : ViewModel() {
         val text = content.trim()
         if (edited.value?.content !== text) {
             edited.value = edited.value?.copy(content = text)
-        } else return
+        }
     }
 
     fun likeById(id: Long) = repository.likeById(id)
