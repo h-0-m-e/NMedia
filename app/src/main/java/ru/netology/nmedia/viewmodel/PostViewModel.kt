@@ -23,6 +23,9 @@ class PostViewModel : ViewModel() {
     val data = repository.get()
     val edited = MutableLiveData(empty)
 
+    fun removeEdit(){edited.value = empty}
+
+
     fun save() {
         edited.value?.let {
             repository.save(it)
