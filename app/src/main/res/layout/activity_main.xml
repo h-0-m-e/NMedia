@@ -19,12 +19,12 @@
         android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:layout_margin="@dimen/common_medium_dimen"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/white"
+        android:contentDescription="@string/simple_description"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_add_24"
-        android:contentDescription="@string/simple_description" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

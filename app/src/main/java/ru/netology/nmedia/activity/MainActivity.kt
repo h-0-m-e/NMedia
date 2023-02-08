@@ -1,9 +1,9 @@
 package ru.netology.nmedia.activity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.result.launch
 import androidx.activity.viewModels
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
@@ -14,19 +14,11 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
 
-
     val viewModel: PostViewModel by viewModels()
 
     private val newPostContract = registerForActivityResult(
-        NewPostActivity.NewPostContract){ content ->
-        content ?: return@registerForActivityResult
-        viewModel.changeContent(content.toString())
-        viewModel.save()
-    }
-
-    // TODO: Tried to use same contract with different output
-    private val editPostContract = registerForActivityResult(
-        NewPostActivity.NewPostContract){ content ->
+        NewPostActivity.NewPostContract
+    ) { content ->
         content ?: return@registerForActivityResult
         viewModel.changeContent(content.toString())
         viewModel.save()
@@ -49,18 +41,19 @@ class MainActivity : AppCompatActivity() {
             viewModel.shareById(post.id)
         }
 
+        override fun onPlayVideo(post: Post) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
+            val playIntent = Intent.createChooser(intent, getString(R.string.chooser_share_post))
+            startActivity(playIntent)
+        }
+
         override fun onRemove(post: Post) {
             viewModel.removeById(post.id)
         }
 
-        // TODO: Send post.content to NewPostActivity with using contract and intent
         override fun onEdit(post: Post) {
             viewModel.edit(post)
-            Intent(this@MainActivity, NewPostActivity::class.java).apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, post.content)
-                type = "text/plain"
-            }
+            newPostContract.launch(post.content)
         }
     }
 
@@ -81,38 +74,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.add.setOnClickListener{
-            newPostContract.launch()
+        binding.add.setOnClickListener {
+            viewModel.removeEdit()
+            newPostContract.launch(null)
         }
-
-//        binding.editingDeny.setOnClickListener {
-//            with(binding.content) {
-//                setText("")
-//                editingGroup.visibility = View.GONE
-//                clearFocus()
-//                AndroidUtils.hideKeyboard(this)
-//            }
-//        }
-
-//        binding.save.setOnClickListener {
-//            with(binding.content) {
-//                if (text.isNullOrBlank()) {
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        R.string.empty_content_warning,
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    return@setOnClickListener
-//                }
-//
-//                viewModel.changeContent(text.toString())
-//                viewModel.save()
-//
-//                setText("")
-//                editingGroup.visibility = View.GONE
-//                clearFocus()
-//                AndroidUtils.hideKeyboard(this)
-//            }
-//        }
     }
 }
