@@ -1,9 +1,9 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -54,10 +54,7 @@ class PostViewHolder(
             like.isChecked = post.likedByMe
             like.text = countOperator.shortingByLetters(post.likes)
 
-            when (post.video.isNullOrEmpty()) {
-                true -> videoGroup.visibility = View.GONE
-                else -> videoGroup.visibility = View.VISIBLE
-            }
+            videoGroup.isVisible = !post.video.isNullOrEmpty()
 
             videoPreview.setOnClickListener {
                 onInteractionListener.onPlayVideo(post)
