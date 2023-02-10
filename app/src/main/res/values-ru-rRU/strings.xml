@@ -6,4 +6,5 @@
     <string name="edit_button">Изменить</string>
     <string name="remove_button">Удалить</string>
     <string name="empty_content_warning">Контент не может быть пустым</string>
+    <string name="chooser_share_post">Поделиться</string>
 </resources>

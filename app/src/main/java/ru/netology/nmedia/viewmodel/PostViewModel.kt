@@ -21,7 +21,12 @@ private val empty = Post(
 class PostViewModel : ViewModel() {
     private val repository: PostRepository = PostRepositoryInMemoryImpl()
     val data = repository.get()
-    val edited = MutableLiveData(empty)
+    private val edited = MutableLiveData(empty)
+
+    fun removeEdit() {
+        edited.value = empty
+    }
+
 
     fun save() {
         edited.value?.let {

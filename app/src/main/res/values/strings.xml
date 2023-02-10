@@ -5,5 +5,7 @@
     <string name="edit_button">Edit</string>
     <string name="remove_button">Remove</string>
     <string name="empty_content_warning">Content can\'t be empty</string>
+    <string name="chooser_share_post">Share</string>
+    <string name="ok_message" translatable="false">OK</string>
 
 </resources>
