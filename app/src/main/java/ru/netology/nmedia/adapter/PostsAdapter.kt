@@ -11,15 +11,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.listener.OnInteractionListener
 import ru.netology.nmedia.repository.Post
 
-interface OnInteractionListener {
-    fun onLike(post: Post) {}
-    fun onShare(post: Post) {}
-    fun onEdit(post: Post) {}
-    fun onRemove(post: Post) {}
-    fun onPlayVideo(post: Post) {}
-}
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener
@@ -87,6 +81,10 @@ class PostViewHolder(
                         }
                     }
                 }.show()
+            }
+
+            root.setOnClickListener {
+                onInteractionListener.onOpenPost(post)
             }
         }
     }
