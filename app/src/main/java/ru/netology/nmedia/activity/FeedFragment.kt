@@ -21,23 +21,27 @@ class FeedFragment : Fragment() {
         ownerProducer = ::requireParentFragment
     )
 
-    private val interactionListener = object : OnInteractionListenerImpl(this@FeedFragment.requireActivity(),viewModel) {
+    private val interactionListener by lazy {
+        object : OnInteractionListenerImpl(
+            this@FeedFragment.requireActivity(), viewModel
+        ) {
 
-        override fun onOpenPost(post: Post) {
-            findNavController().navigate(
-                R.id.action_feedFragment_to_postFragment,
-                Bundle().apply {
-                    textArg = post.id.toString()
-                })
-        }
+            override fun onOpenPost(post: Post) {
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_postFragment,
+                    Bundle().apply {
+                        textArg = post.id.toString()
+                    })
+            }
 
-        override fun onEdit(post: Post) {
-            super.onEdit(post)
-            findNavController().navigate(
-                R.id.action_feedFragment_to_newPostFragment,
-                Bundle().apply {
-                    textArg = post.content
-                })
+            override fun onEdit(post: Post) {
+                super.onEdit(post)
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_newPostFragment,
+                    Bundle().apply {
+                        textArg = post.content
+                    })
+            }
         }
     }
 

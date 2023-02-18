@@ -31,20 +31,22 @@ class PostFragment : Fragment() {
             ownerProducer = ::requireParentFragment
         )
 
-        val listener = object: OnInteractionListenerImpl(this.requireActivity(),viewModel) {
+        val interactionListener by lazy {
+            object : OnInteractionListenerImpl(this.requireActivity(), viewModel) {
 
-            override fun onRemove(post: Post) {
-                super.onRemove(post)
-                findNavController().navigate(R.id.action_postFragment_to_feedFragment)
-            }
+                override fun onRemove(post: Post) {
+                    super.onRemove(post)
+                    findNavController().navigate(R.id.action_postFragment_to_feedFragment)
+                }
 
-            override fun onEdit(post: Post) {
-                super.onEdit(post)
-                findNavController().navigate(
-                    R.id.action_postFragment_to_newPostFragment,
-                    Bundle().apply {
-                        textArg = post.content
-                    })
+                override fun onEdit(post: Post) {
+                    super.onEdit(post)
+                    findNavController().navigate(
+                        R.id.action_postFragment_to_newPostFragment,
+                        Bundle().apply {
+                            textArg = post.content
+                        })
+                }
             }
         }
 
@@ -52,7 +54,7 @@ class PostFragment : Fragment() {
 
         binding.post.apply {
             viewModel.data.observe(viewLifecycleOwner) { it ->
-                val viewHolder = PostViewHolder(binding.post, listener)
+                val viewHolder = PostViewHolder(binding.post, interactionListener)
                 val post = it.find { it.id == currentPostId }
                 post?.let { viewHolder.bind(post) }
             }

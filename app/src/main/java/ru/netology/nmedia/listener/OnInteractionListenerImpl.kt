@@ -7,10 +7,11 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.repository.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-open class OnInteractionListenerImpl (
+
+open class OnInteractionListenerImpl(
     private val context: Context,
     private val viewModel: PostViewModel
-        ): OnInteractionListener {
+) : OnInteractionListener {
 
     override fun onLike(post: Post) {
         viewModel.likeById(post.id)
