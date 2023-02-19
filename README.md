@@ -27,7 +27,7 @@
 - Recieve text from another app to create new post
 - Scroll all of your posts
 - Edit and Create post at another window (I said it upper)
-- If there is a video in the post, then go to YouTube(or another websites) directly from the post, just by tap on preview
+- If there is a link to a video in the post, then go to YouTube(or another websites) directly from the post, just by tap on preview
 
 ### Conclusion
 #### NMedia is a constantly developing application in which I invest all my desire and interest on the way to becoming an Android developer!
