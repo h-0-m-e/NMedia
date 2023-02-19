@@ -16,7 +16,7 @@
 - Uses Git,CI.
 
 ### What can we do inside right now?
-###### For the most part, this app consists of posts, implementing the CRUD SYSTEM, so of course you can:
+###### For the most part, this app consists of posts, implementing the CRUD system, so of course you can:
 - Create
 - Read
 - Update
