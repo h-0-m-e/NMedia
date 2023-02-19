@@ -12,7 +12,7 @@ import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.PostViewHolder
 import ru.netology.nmedia.databinding.FragmentPostBinding
 import ru.netology.nmedia.listener.OnInteractionListenerImpl
-import ru.netology.nmedia.repository.Post
+import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class PostFragment : Fragment() {
@@ -30,6 +30,8 @@ class PostFragment : Fragment() {
         val viewModel: PostViewModel by viewModels(
             ownerProducer = ::requireParentFragment
         )
+
+        val currentPostId = requireArguments().textArg?.toLong()
 
         val interactionListener by lazy {
             object : OnInteractionListenerImpl(this.requireActivity(), viewModel) {
@@ -49,8 +51,6 @@ class PostFragment : Fragment() {
                 }
             }
         }
-
-        val currentPostId = requireArguments().textArg!!.toLong()
 
         binding.post.apply {
             viewModel.data.observe(viewLifecycleOwner) { it ->
