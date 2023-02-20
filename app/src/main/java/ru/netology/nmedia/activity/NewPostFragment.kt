@@ -15,17 +15,18 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 class NewPostFragment : Fragment() {
     override fun onCreateView(
-        inflater : LayoutInflater,
+        inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) : View {
+    ): View {
         val binding = FragmentNewPostBinding.inflate(
             inflater,
             container,
-            false)
+            false
+        )
 
         val viewModel: PostViewModel by viewModels(
-            ownerProducer = :: requireParentFragment
+            ownerProducer = ::requireParentFragment
         )
 
         arguments?.textArg?.let(binding.content::setText)

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.listener.OnInteractionListener
-import ru.netology.nmedia.repository.Post
+import ru.netology.nmedia.dto.Post
 
 
 class PostsAdapter(
