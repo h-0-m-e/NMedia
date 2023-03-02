@@ -7,4 +7,10 @@
     <string name="remove_button">Удалить</string>
     <string name="empty_content_warning">Контент не может быть пустым</string>
     <string name="chooser_share_post">Поделиться</string>
+    <string name="channel_remote_name">Серверные уведомления</string>
+    <string name="channel_remote_description">Уведомления с удалённого сервера</string>
+    <string name="notification_user_liked">%1$s лайкнул пост %2$s</string>
+    <string name="notification_not_updated">Обновите приложение чтобы уведомления снова отображались!</string>
+    <string name="new_notification">Новое уведомление!</string>
+    <string name="notification_new_post">Пользователь %1$s опубликовал новый пост:</string>
 </resources>

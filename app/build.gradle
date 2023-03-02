@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "ru.netology.nmedia"
-        minSdk 23
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -39,25 +40,43 @@ android {
 
 dependencies {
 
-    implementation 'androidx.room:room-runtime:2.5.0'
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
-    implementation 'com.google.code.gson:gson:2.8.9'
-    implementation "androidx.recyclerview:recyclerview:1.2.1"
-    implementation "androidx.activity:activity-ktx:1.6.1"
-    implementation "androidx.fragment:fragment-ktx:1.5.5"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    def core_version = "1.9.0"
+    def appcompat_version = "1.6.1"
+    def mdc_version = "1.8.0"
+    def constraintlayout_version = "2.1.4"
+    def recyclerview_version = "1.2.1"
+    def junit_version = "4.13.2"
+    def ext_junit_version = "1.1.5"
+    def espresso_core_version = "3.5.1"
+    def activity_version = "1.6.1"
+    def lifecycle_version = "2.5.1"
+    def gson_version = "2.10.1"
+    def nav_version = "2.5.3"
+    def room_version = "2.5.0"
+    def firebase_version = "31.2.2"
+    def play_services_base_version = "18.2.0"
 
-    kapt 'androidx.room:room-compiler:2.5.0'
+    implementation "androidx.core:core-ktx:$core_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$mdc_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation "androidx.activity:activity-ktx:$activity_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "com.google.code.gson:gson:$gson_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "com.google.firebase:firebase-messaging-ktx"
+    implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation 'junit:junit:4.13.2'
+    kapt "androidx.room:room-compiler:$room_version"
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation platform("com.google.firebase:firebase-bom:$firebase_version")
+
+    testImplementation "junit:junit:$junit_version"
+
+    androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 }

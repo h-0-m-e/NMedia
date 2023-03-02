@@ -7,5 +7,11 @@
     <string name="empty_content_warning">Content can\'t be empty</string>
     <string name="chooser_share_post">Share</string>
     <string name="ok_message" translatable="false">OK</string>
+    <string name="channel_remote_description">Notifications from remote server</string>
+    <string name="channel_remote_name">Server notifications</string>
+    <string name="new_notification">New notification!</string>
+    <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
+    <string name="notification_not_updated"><b>Update the app so that notifications are displayed again!</b></string>
+    <string name="notification_new_post"><big><b>User %1$s published new post:</b></big></string>
 
 </resources>
