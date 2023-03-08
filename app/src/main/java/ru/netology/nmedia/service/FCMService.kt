@@ -72,22 +72,50 @@ class FCMService : FirebaseMessagingService() {
 
     private fun handleNewPost(content: NewPost) {
         val smallText = content.content.slice(0..70).plus("...")
-
         val notification = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(
                 getString(
                     R.string.notification_new_post,
-                    content.userName
+                    content.userName,
+                    smallText,
                 )
             )
-            .setContentText(smallText)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(
+                        getString(
+                            R.string.notification_new_post,
+                            content.userName,
+                            content.content,
+                        )
+                    )
+            )
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }
+
+//    private fun handleNewPost(content: NewPost) {
+//        val smallText = content.content.slice(0..70).plus("...")
+//
+//        val notification = NotificationCompat.Builder(this, channelId)
+//            .setSmallIcon(R.drawable.ic_notification)
+//            .setContentTitle(
+//                getString(
+//                    R.string.notification_new_post,
+//                    content.userName
+//                )
+//            )
+//            .setContentText(smallText)
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//            .build()
+//
+//        NotificationManagerCompat.from(this)
+//            .notify(Random.nextInt(100_000), notification)
+//    }
 
     private fun handleNotUpdated() {
         val notification = NotificationCompat.Builder(this, channelId)

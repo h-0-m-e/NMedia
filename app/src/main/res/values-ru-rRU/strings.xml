@@ -10,7 +10,7 @@
     <string name="channel_remote_name">Серверные уведомления</string>
     <string name="channel_remote_description">Уведомления с удалённого сервера</string>
     <string name="notification_user_liked">%1$s лайкнул пост %2$s</string>
-    <string name="notification_not_updated">Обновите приложение чтобы уведомления снова отображались!</string>
+    <string name="notification_not_updated"><b>Обновите приложение чтобы уведомления снова отображались!</b></string>
     <string name="new_notification">Новое уведомление!</string>
-    <string name="notification_new_post">Пользователь %1$s опубликовал новый пост:</string>
+    <string name="notification_new_post"><big><b>Пользователь %1$s опубликовал новый пост: %2$s</b></big></string>
 </resources>

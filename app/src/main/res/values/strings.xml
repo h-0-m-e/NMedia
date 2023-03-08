@@ -12,6 +12,6 @@
     <string name="new_notification">New notification!</string>
     <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
     <string name="notification_not_updated"><b>Update the app so that notifications are displayed again!</b></string>
-    <string name="notification_new_post"><big><b>User %1$s published new post:</b></big></string>
+    <string name="notification_new_post"><big><b>User %1$s published new post: %2$s</b></big></string>
 
 </resources>
