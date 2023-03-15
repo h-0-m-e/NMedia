@@ -71,51 +71,24 @@ class FCMService : FirebaseMessagingService() {
     }
 
     private fun handleNewPost(content: NewPost) {
-        val smallText = content.content.slice(0..70).plus("...")
         val notification = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(
                 getString(
                     R.string.notification_new_post,
                     content.userName,
-                    smallText,
-                )
-            )
+            ))
+            .setContentText(content.content)
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText(
-                        getString(
-                            R.string.notification_new_post,
-                            content.userName,
-                            content.content,
-                        )
-                    )
+                    .bigText(content.content.slice(0..300).plus("..."))
             )
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }
-
-//    private fun handleNewPost(content: NewPost) {
-//        val smallText = content.content.slice(0..70).plus("...")
-//
-//        val notification = NotificationCompat.Builder(this, channelId)
-//            .setSmallIcon(R.drawable.ic_notification)
-//            .setContentTitle(
-//                getString(
-//                    R.string.notification_new_post,
-//                    content.userName
-//                )
-//            )
-//            .setContentText(smallText)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            .build()
-//
-//        NotificationManagerCompat.from(this)
-//            .notify(Random.nextInt(100_000), notification)
-//    }
 
     private fun handleNotUpdated() {
         val notification = NotificationCompat.Builder(this, channelId)

@@ -12,5 +12,5 @@
     <string name="notification_user_liked">%1$s лайкнул пост %2$s</string>
     <string name="notification_not_updated"><b>Обновите приложение чтобы уведомления снова отображались!</b></string>
     <string name="new_notification">Новое уведомление!</string>
-    <string name="notification_new_post"><big><b>Пользователь %1$s опубликовал новый пост: %2$s</b></big></string>
+    <string name="notification_new_post"><big><b>%1$s опубликовал пост:</b></big></string>
 </resources>
