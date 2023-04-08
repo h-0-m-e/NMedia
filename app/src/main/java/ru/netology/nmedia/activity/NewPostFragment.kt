@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
+import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.utils.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -44,6 +45,10 @@ class NewPostFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            AndroidUtils.hideKeyboard(requireView())
+        }
+        viewModel.postCreated.observe(viewLifecycleOwner){
+            viewModel.loadPosts()
             findNavController().navigateUp()
         }
         return binding.root

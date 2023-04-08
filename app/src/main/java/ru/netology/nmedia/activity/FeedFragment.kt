@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -56,17 +57,30 @@ class FeedFragment : Fragment() {
             false
         )
 
+        val swipeRefresh = binding.swiperefresh
+
         val adapter = PostsAdapter(interactionListener)
 
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val newPost = adapter.currentList.size < posts.size
-            adapter.submitList(posts) {
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            val newPost = adapter.currentList.size < state.posts.size
+            adapter.submitList(state.posts) {
                 if (newPost) {
                     binding.list.smoothScrollToPosition(0)
                 }
             }
+            binding.errorGroup.isVisible = state.error
+            binding.emptyText.isVisible = state.empty
+            binding.loading.isVisible = state.loading
         }
+
+        swipeRefresh.setOnRefreshListener{
+            swipeRefresh.isRefreshing = true
+            viewModel.loadPosts()
+            swipeRefresh.isRefreshing = false
+        }
+
+        binding.retryButton.setOnClickListener { viewModel.loadPosts() }
 
         binding.add.setOnClickListener {
             viewModel.removeEdit()
