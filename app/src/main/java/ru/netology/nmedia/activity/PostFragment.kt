@@ -55,7 +55,7 @@ class PostFragment : Fragment() {
         binding.post.apply {
             viewModel.data.observe(viewLifecycleOwner) { it ->
                 val viewHolder = PostViewHolder(binding.post, interactionListener)
-                val post = it.find { it.id == currentPostId }
+                val post = it.posts.find { it.id == currentPostId }
                 post?.let { viewHolder.bind(post) }
             }
         }
