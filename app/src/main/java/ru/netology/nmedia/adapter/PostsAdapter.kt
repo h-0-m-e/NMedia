@@ -13,6 +13,8 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.listener.OnInteractionListener
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.extensions.load
+import ru.netology.nmedia.extensions.loadCircle
 
 
 class PostsAdapter(
@@ -36,9 +38,14 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val countOperator = CountOperator()
+    private val baseUrl = "http://192.168.100.237:9999"
 
     fun bind(post: Post) {
         binding.apply {
+            postAvatar.loadCircle("$baseUrl/avatars/${post.authorAvatar}")
+            attachment.load("$baseUrl/images/${post.attachment?.url}")
+            attachment.contentDescription = post.attachment?.description
+            attachment.isVisible = !post.attachment?.url.isNullOrBlank()
             nickname.text = post.author
             published.text = post.published
             postText.text = post.content

@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@id/nameBarrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/post_avatar" />
+        tools:srcCompat="@drawable/post_avatar" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/nameBarrier"
@@ -75,11 +75,29 @@
         android:layout_marginTop="@dimen/common_dimen"
         android:layout_marginEnd="@dimen/common_dimen"
         android:layout_marginBottom="@dimen/common_dimen"
-        app:layout_constraintBottom_toTopOf="@id/videoPreview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameBarrier"
-        tools:text="Тестовый текст" />
+        tools:text="Тестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТестовый текстТест" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/attachmentBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="postText" />
+
+    <ImageView
+        android:id="@+id/attachment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/special_attachment_dimen"
+        android:layout_marginStart="@dimen/common_dimen"
+        android:layout_marginEnd="@dimen/common_dimen"
+        android:layout_marginTop="@dimen/common_medium_dimen"
+        android:contentDescription="@string/simple_description"
+        app:layout_constraintBottom_toTopOf="@id/videoPreview"
+        app:layout_constraintTop_toBottomOf="@id/attachmentBarrier"
+        tools:srcCompat="@drawable/test_image" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/videoGroup"
@@ -87,13 +105,17 @@
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="videoPreview, playVideo" />
 
+
     <ImageView
         android:id="@+id/videoPreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/common_dimen"
+        android:layout_marginTop="@dimen/common_dimen"
+        android:layout_marginEnd="@dimen/common_dimen"
         android:contentDescription="@string/simple_description"
         app:layout_constraintBottom_toTopOf="@id/TextBarrier"
-        app:layout_constraintTop_toBottomOf="@id/postText"
+        app:layout_constraintTop_toBottomOf="@id/attachment"
         app:srcCompat="@drawable/youtube" />
 
 
