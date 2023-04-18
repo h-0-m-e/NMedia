@@ -4,7 +4,9 @@
     <color name="bright_green">#44FB03</color>
     <color name="dark_green">#039C05</color>
     <color name="mint">#2DE384</color>
+    <color name="mint_transparent">#461CFF89</color>
     <color name="dark_mint">#0C9E51</color>
+    <color name="extra_dark_mint">#064323</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
