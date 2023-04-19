@@ -88,18 +88,34 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(post: Post) {
-        repository.likeById(post, object : GeneralCallback<Post> {
-            override fun onSuccess(data: Post) {
-                _data.postValue(FeedPosts(posts = _data.value?.posts.orEmpty().map {
-                    if (it.id == post.id) data else it
-                }))
-            }
+        if(!post.likedByMe) {
+            repository.likeById(post.id, object : GeneralCallback<Post> {
+                override fun onSuccess(data: Post) {
+                    _data.postValue(FeedPosts(posts = _data.value?.posts.orEmpty().map {
+                        if (it.id == post.id) data else it
+                    }))
+                }
 
-            override fun onError(e: Exception) {
-                _data.postValue(FeedPosts(error = true))
-            }
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedPosts(smallError = true))
+                }
 
-        })
+            })
+        } else{
+            repository.unlikeById(post.id, object : GeneralCallback<Post> {
+                override fun onSuccess(data: Post) {
+                    _data.postValue(FeedPosts(posts = _data.value?.posts.orEmpty().map {
+                        if (it.id == post.id) data else it
+                    }))
+                }
+
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedPosts(smallError = true))
+                }
+
+            })
+
+        }
 
 
     }
@@ -119,7 +135,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception) {
-                _data.postValue(_data.value?.copy(posts = old))
+                _data.postValue(_data.value?.copy(posts = old, smallError = true))
             }
         })
     }

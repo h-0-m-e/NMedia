@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -69,6 +74,17 @@ class FeedFragment : Fragment() {
                     binding.list.smoothScrollToPosition(0)
                 }
             }
+
+            if(state.smallError){
+                Snackbar.make(binding.root,
+                    "Что-то не так :( . Обновите и попробуйте снова.",
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Обновить"){
+                        viewModel.loadPosts()
+                    }
+                    .show()
+            }
+
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
             binding.loading.isVisible = state.loading
@@ -79,6 +95,8 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
             swipeRefresh.isRefreshing = false
         }
+
+
 
         binding.retryButton.setOnClickListener { viewModel.loadPosts() }
 
