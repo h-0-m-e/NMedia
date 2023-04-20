@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.listener.OnInteractionListener
@@ -38,23 +39,21 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val countOperator = CountOperator()
-    private val baseUrl = "http://192.168.100.237:9999"
 
     fun bind(post: Post) {
         binding.apply {
-            postAvatar.loadCircle("$baseUrl/avatars/${post.authorAvatar}")
-            attachment.load("$baseUrl/images/${post.attachment?.url}")
+            postAvatar.loadCircle("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
+            attachment.load("${BuildConfig.BASE_URL}/images/${post.attachment?.url}")
             attachment.contentDescription = post.attachment?.description
             attachment.isVisible = !post.attachment?.url.isNullOrBlank()
             nickname.text = post.author
             published.text = post.published
             postText.text = post.content
             views.text = countOperator.shortingByLetters(post.views)
-            share.isChecked = post.sharedByMe
             share.text = countOperator.shortingByLetters(post.shares)
-            like.isChecked = post.likedByMe
+            share.isChecked = post.sharedByMe
             like.text = countOperator.shortingByLetters(post.likes)
-
+            like.isChecked = post.likedByMe
             videoGroup.isVisible = !post.video.isNullOrEmpty()
 
             videoPreview.setOnClickListener {

@@ -34,6 +34,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
+    private val _smallErrorHappened = SingleLiveEvent<Unit>()
+    val smallErrorHappened: LiveData<Unit>
+        get() = _smallErrorHappened
+
     private val edited = MutableLiveData(empty)
 
     init {
@@ -67,7 +71,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onError(e: Exception) {
-                    _data.postValue(FeedPosts(error = true))
+                    _smallErrorHappened.postValue(Unit)
                 }
 
             })
@@ -97,7 +101,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onError(e: Exception) {
-                    _data.postValue(FeedPosts(smallError = true))
+                    _smallErrorHappened.postValue(Unit)
                 }
 
             })
@@ -110,7 +114,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onError(e: Exception) {
-                    _data.postValue(FeedPosts(smallError = true))
+                    _smallErrorHappened.postValue(Unit)
                 }
 
             })
@@ -135,7 +139,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception) {
-                _data.postValue(_data.value?.copy(posts = old, smallError = true))
+                _data.postValue(_data.value?.copy(posts = old))
+                _smallErrorHappened.postValue(Unit)
             }
         })
     }

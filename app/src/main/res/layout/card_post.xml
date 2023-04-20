@@ -90,7 +90,8 @@
     <ImageView
         android:id="@+id/attachment"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/special_attachment_dimen"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:layout_marginStart="@dimen/common_dimen"
         android:layout_marginEnd="@dimen/common_dimen"
         android:layout_marginTop="@dimen/common_medium_dimen"
@@ -135,7 +136,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="postText,videoPreview" />
+        app:constraint_referenced_ids="postText,attachment,videoPreview" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/like"
