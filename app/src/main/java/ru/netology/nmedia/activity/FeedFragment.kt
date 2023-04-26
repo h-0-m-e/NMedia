@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -57,6 +59,9 @@ class FeedFragment : Fragment() {
             false
         )
 
+        val animationSlideDown = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_down)
+        val animationSlideUp = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
+
         val swipeRefresh = binding.swiperefresh
 
         val adapter = PostsAdapter(interactionListener)
@@ -69,9 +74,25 @@ class FeedFragment : Fragment() {
                     binding.list.smoothScrollToPosition(0)
                 }
             }
+
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
             binding.loading.isVisible = state.loading
+        }
+
+        binding.banner.positiveButton.setOnClickListener {
+            viewModel.loadPosts()
+            binding.banner.root.startAnimation(animationSlideUp)
+            binding.banner.root.isVisible = false
+        }
+        binding.banner.negativeButton.setOnClickListener {
+            finishAffinity(this.requireActivity())
+        }
+
+        viewModel.smallErrorHappened.observe(viewLifecycleOwner){
+
+            binding.banner.root.isVisible = true
+            binding.banner.root.startAnimation(animationSlideDown)
         }
 
         swipeRefresh.setOnRefreshListener{
@@ -79,6 +100,8 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
             swipeRefresh.isRefreshing = false
         }
+
+
 
         binding.retryButton.setOnClickListener { viewModel.loadPosts() }
 

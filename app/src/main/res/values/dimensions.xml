@@ -5,7 +5,9 @@
     <dimen name="big_dimen">48dp</dimen>
     <dimen name="medium_dimen">36dp</dimen>
     <dimen name="common_medium_dimen">24dp</dimen>
+    <dimen name="pre_medium_dimen">20dp</dimen>
     <dimen name="common_dimen">16dp</dimen>
     <dimen name="small_dimen">10dp</dimen>
+    <dimen name="common_small_dimen">8dp</dimen>
     <dimen name="extra_small_dimen">4dp</dimen>
 </resources>

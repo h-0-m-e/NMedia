@@ -11,8 +11,9 @@
 ### More detailed:
 ###### It is created on Kotlin on the principle of OOP (of course) and MVVM.
 ###### Current technology stack: 
-- ROOM
 - MDC
+- Retrofit
+- Glide
 - Uses Git,CI.
 
 ### What can we do inside right now?

@@ -34,6 +34,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
+    private val _smallErrorHappened = SingleLiveEvent<Unit>()
+    val smallErrorHappened: LiveData<Unit>
+        get() = _smallErrorHappened
+
     private val edited = MutableLiveData(empty)
 
     init {
@@ -67,7 +71,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onError(e: Exception) {
-                    _data.postValue(FeedPosts(error = true))
+                    _smallErrorHappened.postValue(Unit)
                 }
 
             })
@@ -88,18 +92,34 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(post: Post) {
-        repository.likeById(post, object : GeneralCallback<Post> {
-            override fun onSuccess(data: Post) {
-                _data.postValue(FeedPosts(posts = _data.value?.posts.orEmpty().map {
-                    if (it.id == post.id) data else it
-                }))
-            }
+        if(!post.likedByMe) {
+            repository.likeById(post.id, object : GeneralCallback<Post> {
+                override fun onSuccess(data: Post) {
+                    _data.postValue(FeedPosts(posts = _data.value?.posts.orEmpty().map {
+                        if (it.id == post.id) data else it
+                    }))
+                }
 
-            override fun onError(e: Exception) {
-                _data.postValue(FeedPosts(error = true))
-            }
+                override fun onError(e: Exception) {
+                    _smallErrorHappened.postValue(Unit)
+                }
 
-        })
+            })
+        } else{
+            repository.unlikeById(post.id, object : GeneralCallback<Post> {
+                override fun onSuccess(data: Post) {
+                    _data.postValue(FeedPosts(posts = _data.value?.posts.orEmpty().map {
+                        if (it.id == post.id) data else it
+                    }))
+                }
+
+                override fun onError(e: Exception) {
+                    _smallErrorHappened.postValue(Unit)
+                }
+
+            })
+
+        }
 
 
     }
@@ -120,6 +140,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onError(e: Exception) {
                 _data.postValue(_data.value?.copy(posts = old))
+                _smallErrorHappened.postValue(Unit)
             }
         })
     }

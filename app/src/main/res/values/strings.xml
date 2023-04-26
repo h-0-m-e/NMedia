@@ -16,5 +16,8 @@
     <string name="error_loading">Loading error</string>
     <string name="retry_loading">Retry</string>
     <string name="empty_posts">Nothing to see here yet :(</string>
+    <string name="small_error">Oops, something went wrong :( . Refresh and try again or restart the app.</string>
+    <string name="small_error_positive">Refresh</string>
+    <string name="small_error_negative">Restart</string>
 
 </resources>
