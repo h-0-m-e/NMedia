@@ -28,7 +28,6 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository{
             postDao.likeById(id)
             val response = PostApi.service.unlikeById(id)
             if (!response.isSuccessful){
-                postDao.unlikeById(id)
                 throw RuntimeException(response.message())
             }
         } catch (e: IOException) {
@@ -43,7 +42,6 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository{
             postDao.unlikeById(id)
             val response = PostApi.service.unlikeById(id)
             if (!response.isSuccessful){
-                postDao.likeById(id)
                 throw RuntimeException(response.message())
             }
         } catch (e: IOException) {

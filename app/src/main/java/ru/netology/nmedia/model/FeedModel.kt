@@ -1,7 +1,7 @@
 package ru.netology.nmedia.model
 
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.enum.ErrorType
+import ru.netology.nmedia.types.ErrorType
 
 data class FeedModel (
     val posts: List<Post> = emptyList(),
