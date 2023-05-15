@@ -44,7 +44,6 @@ class PostViewHolder(
         binding.apply {
             postAvatar.loadCircle("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
             attachment.load("${BuildConfig.BASE_URL}/images/${post.attachment?.url}")
-            attachment.contentDescription = post.attachment?.description
             attachment.isVisible = !post.attachment?.url.isNullOrBlank()
             nickname.text = post.author
             published.text = post.published

@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.listener.OnInteractionListenerImpl
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.types.ErrorType
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -59,51 +59,48 @@ class FeedFragment : Fragment() {
             false
         )
 
-        val animationSlideDown = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_down)
-        val animationSlideUp = AnimationUtils.loadAnimation(this.requireContext(), R.anim.slide_up)
-
         val swipeRefresh = binding.swiperefresh
 
         val adapter = PostsAdapter(interactionListener)
 
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            val newPost = adapter.currentList.size < state.posts.size
-            adapter.submitList(state.posts) {
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            val newPost = adapter.currentList.size < data.posts.size
+            adapter.submitList(data.posts) {
                 if (newPost) {
                     binding.list.smoothScrollToPosition(0)
                 }
             }
-
-            binding.errorGroup.isVisible = state.error
-            binding.emptyText.isVisible = state.empty
-            binding.loading.isVisible = state.loading
+            binding.emptyText.isVisible = data.empty
         }
 
-        binding.banner.positiveButton.setOnClickListener {
-            viewModel.loadPosts()
-            binding.banner.root.startAnimation(animationSlideUp)
-            binding.banner.root.isVisible = false
-        }
-        binding.banner.negativeButton.setOnClickListener {
-            finishAffinity(this.requireActivity())
-        }
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            binding.swiperefresh.isRefreshing = state.refreshing
+            when (state.error) {
+                ErrorType.LOADING ->
+                    Snackbar.make(binding.root, R.string.error, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry) { viewModel.loadPosts() }
+                    .show()
+                ErrorType.SAVE ->
+                    Snackbar.make(binding.root, R.string.error, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.retry) { viewModel.save() }
+                        .show()
+                ErrorType.LIKE ->
+                    Snackbar.make(binding.root, R.string.error, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.retry) { viewModel.likeById(viewModel.lastPost.value!!) }
+                        .show()
+                ErrorType.REMOVE ->
+                    Snackbar.make(binding.root, R.string.error, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.retry) { viewModel.removeById(viewModel.lastId.value!!) }
+                        .show()
+                null -> Unit
 
-        viewModel.smallErrorHappened.observe(viewLifecycleOwner){
-
-            binding.banner.root.isVisible = true
-            binding.banner.root.startAnimation(animationSlideDown)
+            }
         }
 
         swipeRefresh.setOnRefreshListener{
-            swipeRefresh.isRefreshing = true
-            viewModel.loadPosts()
-            swipeRefresh.isRefreshing = false
+            viewModel.refresh()
         }
-
-
-
-        binding.retryButton.setOnClickListener { viewModel.loadPosts() }
 
         binding.add.setOnClickListener {
             viewModel.removeEdit()

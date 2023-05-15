@@ -1,133 +1,91 @@
 package ru.netology.nmedia.repository
 
-
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import ru.netology.nmedia.api.PostApi
+import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Post
-import kotlin.random.Random
+import ru.netology.nmedia.entity.PostEntity
+import ru.netology.nmedia.error.ApiError
+import ru.netology.nmedia.error.NetworkError
+import java.io.IOException
 
-class PostRepositoryImpl : PostRepository {
-//This variable can be true for simulate 2xx response codes and false to simulate others
-    private var fakeResponseCode = Random.nextBoolean()
+class PostRepositoryImpl(private val postDao: PostDao) : PostRepository{
+    override val data: LiveData<List<Post>> =
+        postDao.getAll().map {it.map(PostEntity::toDto)}
 
-    override fun getAll(postsCallback: GeneralCallback<List<Post>>) {
-        PostApi.service.getAll()
-            .enqueue(object: Callback<List<Post>> {
-                override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-                    if (!response.isSuccessful){
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                        postsCallback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
-                }
-
-                override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                    postsCallback.onError(RuntimeException(t))
-                }
-            })
+    override suspend fun getAll() {
+        val response = PostApi.service.getAll()
+        if (!response.isSuccessful) {
+            throw RuntimeException(response.message())
+        }
+        val posts = response.body() ?: throw RuntimeException("body is null")
+        postDao.insert(posts.map { PostEntity.fromDto(it) })
     }
 
-    override fun likeById(id: Long, postsCallback: GeneralCallback<Post>) {
-
-        PostApi.service.likeById(id)
-            .enqueue(object: Callback<Post>{
-                override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                    if (!response.isSuccessful){
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    if(fakeResponseCode) {
-                        postsCallback.onSuccess(
-                            response.body() ?: throw RuntimeException("body is null")
-                        )
-                    } else{
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    fakeResponseCode=!fakeResponseCode
-                }
-
-                override fun onFailure(call: Call<Post>, t: Throwable) {
-                    postsCallback.onError(RuntimeException(t))
-                }
-
-            })
+    override suspend fun likeById(id: Long) {
+        try{
+            postDao.likeById(id)
+            val response = PostApi.service.unlikeById(id)
+            if (!response.isSuccessful){
+                throw RuntimeException(response.message())
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw ru.netology.nmedia.error.UnknownError
+        }
     }
 
-    override fun unlikeById(id: Long, postsCallback: GeneralCallback<Post>) {
+    override suspend fun unlikeById(id: Long) {
+        try{
+            postDao.unlikeById(id)
+            val response = PostApi.service.unlikeById(id)
+            if (!response.isSuccessful){
+                throw RuntimeException(response.message())
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw ru.netology.nmedia.error.UnknownError
+        }
 
-        PostApi.service.unlikeById(id)
-            .enqueue(object: Callback<Post>{
-                override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                    if (!response.isSuccessful){
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    if(fakeResponseCode) {
-                        postsCallback.onSuccess(
-                            response.body() ?: throw RuntimeException("body is null")
-                        )
-                    } else{
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    fakeResponseCode=!fakeResponseCode
-                }
 
-                override fun onFailure(call: Call<Post>, t: Throwable) {
-                    postsCallback.onError(RuntimeException(t))
-                }
-
-            })
     }
 
-
-
-    override fun shareById(id: Long) {
+    override suspend fun shareById(id: Long) {
+        //Works not good, cause of not implemented on server
+        postDao.shareById(id)
     }
 
-    override fun save(post: Post, postsCallback: GeneralCallback<Post>) {
-        PostApi.service.save(post)
-            .enqueue(object: Callback<Post>{
-                override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                    if (!response.isSuccessful){
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    if(fakeResponseCode) {
-                        postsCallback.onSuccess(
-                            response.body() ?: throw RuntimeException("body is null")
-                        )
-                    } else{
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    fakeResponseCode=!fakeResponseCode
-                }
+    override suspend fun save(post: Post) {
+        try {
+            val response = PostApi.service.save(post)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
 
-                override fun onFailure(call: Call<Post>, t: Throwable) {
-                    postsCallback.onError(RuntimeException(t))
-                }
-
-            })
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw ru.netology.nmedia.error.UnknownError
+        }
     }
 
-    override fun removeById(id: Long,postsCallback: GeneralCallback<Unit>) {
-
-        PostApi.service.removeById(id)
-            .enqueue(object: Callback<Unit>{
-                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                    if (!response.isSuccessful){
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    if(fakeResponseCode) {
-                        postsCallback.onSuccess(Unit)
-                    } else{
-                        postsCallback.onError(RuntimeException(response.message()))
-                    }
-                    fakeResponseCode=!fakeResponseCode
-                }
-
-                override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    postsCallback.onError(RuntimeException(t))
-                }
-
-            })
+    override suspend fun removeById(id: Long) {
+        try {
+            postDao.removeById(id)
+            val response = PostApi.service.likeById(id)
+            if (!response.isSuccessful){
+                throw RuntimeException(response.message())
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw ru.netology.nmedia.error.UnknownError
+        }
     }
 
 }
