@@ -11,10 +11,14 @@
 ### More detailed:
 ###### It is created on Kotlin on the principle of OOP (of course) and MVVM.
 ###### Current technology stack: 
+- Coroutines
+- Flow
+- Room
+- Retrofit
 - MDC
 - Retrofit
 - Glide
-- Uses Git,CI.
+- Works with server by REST
 
 ### What can we do inside right now?
 ###### For the most part, this app consists of posts, implementing the CRUD system, so of course you can:
