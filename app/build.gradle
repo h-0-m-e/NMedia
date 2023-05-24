@@ -35,7 +35,7 @@ android {
         }
         debug {
             manifestPlaceholders.usesCleartextTraffic = true
-            buildConfigField "String", "BASE_URL", "\"http://192.168.35.237:9999/\""
+            buildConfigField "String", "BASE_URL", "\"http://192.168.122.237:9999/\""
         }
     }
     compileOptions {
@@ -57,7 +57,7 @@ dependencies {
     def junit_version = "4.13.2"
     def ext_junit_version = "1.1.5"
     def espresso_core_version = "3.5.1"
-    def activity_version = "1.7.1"
+    def activity_version = "1.7.2"
     def lifecycle_version = "2.6.1"
     def gson_version = "2.10.1"
     def nav_version = "2.5.3"
@@ -70,6 +70,7 @@ dependencies {
     def retrofit_version = "2.9.0"
     def logging_interceptor_version = "4.10.0"
     def coroutines_version = "1.6.4"
+    def imagepicker_version = "2.1"
 
     implementation "androidx.core:core-ktx:$core_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
@@ -92,6 +93,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
 
     kapt "androidx.room:room-compiler:$room_version"
 

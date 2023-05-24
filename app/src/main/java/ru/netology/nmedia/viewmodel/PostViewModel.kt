@@ -11,6 +11,7 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.types.ErrorType
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
+import ru.netology.nmedia.model.PhotoModel
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.utils.SingleLiveEvent
@@ -39,6 +40,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val dataState: LiveData<FeedModelState>
         get() = _dataState
 
+    private val _photo = MutableLiveData<PhotoModel?>()
+    val photo: LiveData<PhotoModel?>
+        get() = _photo
+
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
@@ -57,17 +62,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         get() = _lastId
 
     private val _lastPost =
-        MutableLiveData(Post(
-            0,
-            "",
-            "",
-            "",
-            "",
-            likedByMe = false,
-            sharedByMe = false,
-            0,
-            0,
-            0))
+        MutableLiveData(
+            Post(
+                0,
+                "",
+                "",
+                "",
+                "",
+                likedByMe = false,
+                sharedByMe = false,
+                0,
+                0,
+                0
+            )
+        )
     val lastPost: LiveData<Post>
         get() = _lastPost
 
@@ -80,7 +88,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         try {
             repository.getAll()
             _dataState.value = FeedModelState()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             _dataState.value = FeedModelState(error = ErrorType.LOADING)
         }
     }
@@ -90,7 +98,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         try {
             repository.getAll()
             _dataState.value = FeedModelState()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             _dataState.value = FeedModelState(error = ErrorType.LOADING)
         }
     }
@@ -111,13 +119,17 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun save() = viewModelScope.launch {
-        try{
+        try {
             edited.value?.let {
-                repository.save(it)
+                when (val photo = _photo.value) {
+                    null -> repository.save(it)
+                    else -> repository.saveWithAttachment(it, photo)
+                }
+
             }
             edited.value = empty
             _postCreated.postValue(Unit)
-        }catch(e: Exception){
+        } catch (e: Exception) {
             _dataState.value = FeedModelState(error = ErrorType.SAVE)
         }
     }
@@ -135,9 +147,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(post: Post) = viewModelScope.launch {
         _lastPost.postValue(post)
-        try{
-                repository.likeById(_lastPost.value!!.id)
-        }catch (e: Exception) {
+        try {
+            repository.likeById(_lastPost.value!!.id)
+        } catch (e: Exception) {
             _dataState.value = FeedModelState(error = ErrorType.LIKE)
         }
 
@@ -152,8 +164,18 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         _lastId.postValue(id)
         try {
             repository.removeById(_lastId.value!!)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             _dataState.value = FeedModelState(error = ErrorType.REMOVE)
         }
     }
+
+    fun setPhoto(photoModel: PhotoModel) {
+        _photo.value = photoModel
+    }
+
+    fun clearPhoto() {
+        _photo.value = null
+    }
+
+
 }

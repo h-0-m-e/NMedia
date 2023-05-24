@@ -16,5 +16,8 @@
     <string name="error">Oops, something went wrong :( . Refresh or try again.</string>
     <string name="retry">Retry</string>
     <string name="empty_posts">Nothing to see here yet :(</string>
+    <string name="clear">Clear</string>
+    <string name="picker_error">Photo picker error</string>
+    <string name="save">Save</string>
 
 </resources>

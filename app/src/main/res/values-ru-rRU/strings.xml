@@ -16,4 +16,7 @@
     <string name="empty_posts">Здесь пока ничего нет :(</string>
     <string name="error">Упс, что-то пошло не так :( . Обновите или попробуйте снова.</string>
     <string name="retry">Повторить</string>
+    <string name="clear">Убрать</string>
+    <string name="picker_error">Ошибка при выборе фото</string>
+    <string name="save">Сохранить</string>
 </resources>

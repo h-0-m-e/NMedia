@@ -82,8 +82,8 @@ class FeedFragment : Fragment() {
             when (state.error) {
                 ErrorType.LOADING ->
                     Snackbar.make(binding.root, R.string.error, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.retry) { viewModel.loadPosts() }
-                    .show()
+                        .setAction(R.string.retry) { viewModel.loadPosts() }
+                        .show()
                 ErrorType.SAVE ->
                     Snackbar.make(binding.root, R.string.error, Snackbar.LENGTH_LONG)
                         .setAction(R.string.retry) { viewModel.save() }
@@ -101,27 +101,27 @@ class FeedFragment : Fragment() {
             }
         }
 
-        adapter.registerAdapterDataObserver(object : AdapterDataObserver(){
+        adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if (positionStart == 0){
+                if (positionStart == 0) {
                     binding.list.smoothScrollToPosition(0)
                 }
             }
         })
 
-        viewModel.newerCount.observe(viewLifecycleOwner){
+        viewModel.newerCount.observe(viewLifecycleOwner) {
             if (it > 0) {
                 binding.newPostsButton.visibility = VISIBLE
             }
         }
 
         binding.newPostsButton.setOnClickListener {
-                viewModel.showHiddenPosts()
-                binding.list.smoothScrollToPosition(0)
-                it.visibility = GONE
+            viewModel.showHiddenPosts()
+            binding.list.smoothScrollToPosition(0)
+            it.visibility = GONE
         }
 
-        swipeRefresh.setOnRefreshListener{
+        swipeRefresh.setOnRefreshListener {
             viewModel.refresh()
         }
 
