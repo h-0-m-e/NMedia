@@ -19,4 +19,5 @@
     <string name="clear">Убрать</string>
     <string name="picker_error">Ошибка при выборе фото</string>
     <string name="save">Сохранить</string>
+    <string name="back">Назад</string>
 </resources>

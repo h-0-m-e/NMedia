@@ -42,9 +42,6 @@ class PostViewHolder(
 
     fun bind(post: Post) {
         binding.apply {
-            postAvatar.loadCircle("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
-            attachment.load("${BuildConfig.BASE_URL}/images/${post.attachment?.url}")
-            attachment.isVisible = !post.attachment?.url.isNullOrBlank()
             nickname.text = post.author
             published.text = post.published
             postText.text = post.content
@@ -53,10 +50,17 @@ class PostViewHolder(
             share.isChecked = post.sharedByMe
             like.text = countOperator.shortingByLetters(post.likes)
             like.isChecked = post.likedByMe
+            postAvatar.loadCircle("${BuildConfig.BASE_URL}avatars/${post.authorAvatar}")
+            attachment.load("${BuildConfig.BASE_URL}media/${post.attachment?.url}")
+            attachment.isVisible = !post.attachment?.url.isNullOrBlank()
             videoGroup.isVisible = !post.video.isNullOrEmpty()
 
             videoPreview.setOnClickListener {
                 onInteractionListener.onPlayVideo(post)
+            }
+
+            attachment.setOnClickListener {
+                onInteractionListener.onShowAttachment(post)
             }
 
             playVideo.setOnClickListener {

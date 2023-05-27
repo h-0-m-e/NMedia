@@ -9,4 +9,5 @@ interface OnInteractionListener {
     fun onRemove(post: Post) {}
     fun onPlayVideo(post: Post) {}
     fun onOpenPost(post: Post) {}
+    fun onShowAttachment(post: Post) {}
 }

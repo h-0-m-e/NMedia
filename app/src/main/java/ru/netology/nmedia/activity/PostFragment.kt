@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.PostViewHolder
@@ -47,6 +48,15 @@ class PostFragment : Fragment() {
                         R.id.action_postFragment_to_newPostFragment,
                         Bundle().apply {
                             textArg = post.content
+                        })
+                }
+
+                override fun onShowAttachment(post: Post) {
+                    findNavController().navigate(
+                        R.id.action_postFragment_to_photoFragment,
+                        Bundle().apply {
+                            textArg = "${BuildConfig.BASE_URL}media/${post.attachment!!.url}"
+
                         })
                 }
             }

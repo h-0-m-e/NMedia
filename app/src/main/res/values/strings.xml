@@ -19,5 +19,6 @@
     <string name="clear">Clear</string>
     <string name="picker_error">Photo picker error</string>
     <string name="save">Save</string>
+    <string name="back">Back</string>
 
 </resources>

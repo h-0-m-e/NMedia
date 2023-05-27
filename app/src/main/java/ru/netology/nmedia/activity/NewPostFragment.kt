@@ -75,6 +75,7 @@ class NewPostFragment : Fragment() {
         viewModel.photo.observe(viewLifecycleOwner) { photo ->
             if (photo == null) {
                 binding.previewContainer.isGone = true
+                binding.preview.setImageURI(null)
                 return@observe
             }
             binding.previewContainer.isGone = false
