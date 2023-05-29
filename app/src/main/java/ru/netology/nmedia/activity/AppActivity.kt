@@ -3,14 +3,21 @@ package ru.netology.nmedia.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.core.view.MenuProvider
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
+import ru.netology.nmedia.viewmodel.AuthViewModel
 
 class AppActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +52,50 @@ class AppActivity : AppCompatActivity() {
         }
 
         checkGoogleApiAvailability()
+
+        val viewModel: AuthViewModel by viewModels()
+
+        var oldMenuProvider: MenuProvider? = null
+        viewModel.data.observe(this) {
+            oldMenuProvider?.let {
+                removeMenuProvider(it)
+            }
+            addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.menu_auth, menu)
+                    val authorized = viewModel.isAuthorized
+                    if(authorized){
+                        menu.setGroupVisible(R.id.authorized, true)
+                        menu.setGroupVisible(R.id.unauthorized, false)
+                    }else{
+                        menu.setGroupVisible(R.id.authorized, false)
+                        menu.setGroupVisible(R.id.unauthorized, true)
+                    }
+                }
+
+                override fun onMenuItemSelected(item: MenuItem): Boolean =
+                    when (item.itemId) {
+                        R.id.sign_in -> {
+                            findNavController(R.id.nav_host_fragment).navigate(R.id.signInFragment)
+                            true
+                        }
+
+                        R.id.sign_up -> {
+                            true
+                        }
+
+                        R.id.sign_out -> {
+                            AppAuth.getInstance().clearAuth()
+                            true
+                        }
+
+                        else -> false
+
+                    }
+            }.apply {
+                    oldMenuProvider = this
+            }, this)
+        }
     }
 
     private fun checkGoogleApiAvailability() {

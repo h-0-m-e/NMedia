@@ -14,6 +14,8 @@ import ru.netology.nmedia.adapter.PostViewHolder
 import ru.netology.nmedia.databinding.FragmentPostBinding
 import ru.netology.nmedia.listener.OnInteractionListenerImpl
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.utils.AuthReminder
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class PostFragment : Fragment() {
@@ -29,6 +31,10 @@ class PostFragment : Fragment() {
         )
 
         val viewModel: PostViewModel by viewModels(
+            ownerProducer = ::requireParentFragment
+        )
+
+        val authViewModel: AuthViewModel by viewModels(
             ownerProducer = ::requireParentFragment
         )
 
@@ -49,6 +55,22 @@ class PostFragment : Fragment() {
                         Bundle().apply {
                             textArg = post.content
                         })
+                }
+
+                override fun onLike(post: Post) {
+                    if(authViewModel.isAuthorized){
+                        super.onLike(post)
+                    }else{
+                        AuthReminder.remind(binding.root, "You should sign in to like posts!", this@PostFragment)
+                    }
+                }
+
+                override fun onShare(post: Post) {
+                    if(authViewModel.isAuthorized){
+                        super.onShare(post)
+                    }else{
+                        AuthReminder.remind(binding.root, "You should sign in to share posts!", this@PostFragment)
+                    }
                 }
 
                 override fun onShowAttachment(post: Post) {

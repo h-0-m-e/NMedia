@@ -11,6 +11,7 @@ import ru.netology.nmedia.types.AttachmentType
 data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    val authorId: Long,
     val authorAvatar: String,
     val author: String,
     val content: String,
@@ -25,24 +26,40 @@ data class PostEntity(
     @Embedded
     var attachment: AttachmentEmbeddable?
 ) {
-    fun toDto() = Post(id, authorAvatar, author, content, published, likedByMe, sharedByMe,likes,shares,views,video,attachment?.toDto())
+    fun toDto() = Post(
+        id = id,
+        authorId = authorId,
+        authorAvatar = authorAvatar,
+        author = author,
+        content = content,
+        published = published,
+        likedByMe = likedByMe,
+        sharedByMe = sharedByMe,
+        likes = likes,
+        shares = shares,
+        views = views,
+        video = video,
+        attachment = attachment?.toDto()
+    )
 
     companion object {
         fun fromDto(dto: Post, hidden: Boolean) =
             PostEntity(
-                dto.id,
-                dto.authorAvatar,
-                dto.author,
-                dto.content,
-                dto.published,
-                dto.likedByMe,
-                dto.sharedByMe,
-                dto.likes,
-                dto.shares,
-                dto.views,
-                dto.video,
+                id = dto.id,
+                authorId = dto.authorId,
+                authorAvatar = dto.authorAvatar,
+                author = dto.author,
+                content = dto.content,
+                published = dto.published,
+                likedByMe = dto.likedByMe,
+                sharedByMe = dto.sharedByMe,
+                likes = dto.likes,
+                shares = dto.shares,
+                views = dto.views,
+                video = dto.video,
                 hidden = hidden,
-                AttachmentEmbeddable.fromDto(dto.attachment))
+                attachment = AttachmentEmbeddable.fromDto(dto.attachment)
+            )
 
     }
 }

@@ -57,20 +57,6 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         postDao.insert(posts.map { PostEntity.fromDto(it, hidden = false) })
     }
 
-//    override suspend fun countPosts(): Flow<Int> = flow {
-//        while (true) {
-//            delay(2_000)
-//
-//            try {
-//                val count = postDao.countPosts()
-//            } catch (e: CancellationException) {
-//                throw e
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-
     override suspend fun showAll() {
         try {
             postDao.showAll()

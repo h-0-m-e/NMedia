@@ -20,5 +20,13 @@
     <string name="picker_error">Photo picker error</string>
     <string name="save">Save</string>
     <string name="back">Back</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_in_error">User name not found or incorrect password/login</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="empty_fields">Fields should not be empty</string>
+    <string name="chooser_play_video">Play</string>
 
 </resources>
