@@ -2,16 +2,23 @@ package ru.netology.nmedia.auth
 
 import android.content.Context
 import androidx.core.content.edit
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import ru.netology.nmedia.api.Api
+import ru.netology.nmedia.dto.PushToken
 import ru.netology.nmedia.dto.Token
 
 class AppAuth private constructor(
     context: Context
 ) {
     companion object{
-        private const val TOKEN_KEY = "TOKEN_KEY"
-        private const val ID_KEY = "ID_KEY"
+        private const val TOKEN_KEY = "token"
+        private const val ID_KEY = "id"
 
         @Volatile
         private var INSTANCE: AppAuth? = null
@@ -34,9 +41,25 @@ class AppAuth private constructor(
         val id = prefs.getLong(ID_KEY, 0L)
 
         if (token == null || id == 0L){
-            prefs.edit { clear() }
+            _data.value = null
+            prefs.edit {
+                clear()
+                apply()
+            }
         } else {
             _data.value = Token(id, token)
+        }
+        sendPushToken()
+    }
+
+    fun sendPushToken(token: String? = null) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val request = PushToken(token ?: FirebaseMessaging.getInstance().token.await())
+                Api.service.sendPushToken(request)
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
         }
     }
 
@@ -46,14 +69,18 @@ class AppAuth private constructor(
         prefs.edit{
             putString(TOKEN_KEY, token.token)
             putLong(ID_KEY, token.id)
-
+            apply()
         }
-
+        sendPushToken()
     }
 
     @Synchronized
     fun clearAuth(){
         _data.value = null
-        prefs.edit { clear() }
+        prefs.edit {
+            clear()
+            apply()
+        }
+        sendPushToken()
     }
 }

@@ -2,7 +2,7 @@ package ru.netology.nmedia.viewmodel
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import ru.netology.nmedia.api.AuthApi
+import ru.netology.nmedia.api.Api
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Token
 import ru.netology.nmedia.error.ApiError
@@ -17,7 +17,7 @@ class SignInViewModel: ViewModel() {
     fun signIn(login: String, pass: String) = viewModelScope.launch {
         _dataState.value = AuthModelState(loading = true)
         try {
-            val response = AuthApi.service.updateUser(login,pass)
+            val response = Api.service.updateUser(login,pass)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
