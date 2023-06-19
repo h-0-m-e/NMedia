@@ -16,36 +16,6 @@ import ru.netology.nmedia.dto.PushToken
 import ru.netology.nmedia.dto.Token
 import java.util.concurrent.TimeUnit
 
-private const val BASE_URL = "${BuildConfig.BASE_URL}api/slow/"
-
-private val client = OkHttpClient.Builder()
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .run {
-        if (BuildConfig.DEBUG) {
-            this.addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-        } else {
-            this
-        }
-    }
-    .addInterceptor { chain ->
-        AppAuth.getInstance().data.value?.token?.let { token ->
-            val newRequest = chain.request().newBuilder()
-                .addHeader("Authorization", token)
-                .build()
-            return@addInterceptor chain.proceed(newRequest)
-        }
-        chain.proceed(chain.request())
-    }
-    .build()
-
-private val retrofit = Retrofit.Builder()
-    .baseUrl(BASE_URL)
-    .client(client)
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-
 interface ApiService {
 
     @GET("posts")
@@ -76,8 +46,4 @@ interface ApiService {
 
     @POST("users/push-tokens")
     suspend fun sendPushToken(@Body token: PushToken): Response<Unit>
-}
-
-object Api {
-    val service: ApiService by lazy { retrofit.create() }
 }

@@ -11,15 +11,22 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import ru.netology.nmedia.R
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.service.actions.Action
 import ru.netology.nmedia.service.actions.Like
 import ru.netology.nmedia.service.actions.NewPost
+import javax.inject.Inject
 import kotlin.random.Random
 
+@AndroidEntryPoint
 class FCMService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
     private val channelId = "remote"
     private val gson = Gson()
     private val pushStub by lazy {
@@ -39,7 +46,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        val authId = AppAuth.getInstance().data.value?.id
+        val authId = appAuth.data.value?.id
         try {
             if (message.data["action"] == null) {
                 val pushJson = message.data.values.firstOrNull()?.let { JSONObject(it) }
@@ -48,8 +55,8 @@ class FCMService : FirebaseMessagingService() {
                 println("..........................................")
                     when(recipientId){
                         "null", authId.toString() -> handlePush(content)
-                        "0" -> AppAuth.getInstance().sendPushToken()
-                        else -> AppAuth.getInstance().sendPushToken()
+                        "0" -> appAuth.sendPushToken()
+                        else -> appAuth.sendPushToken()
                     }
             } else {
                 message.data["action"]?.let {
@@ -69,7 +76,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        AppAuth.getInstance().sendPushToken(token)
+        appAuth.sendPushToken(token)
     }
 
     private fun handlePush(content: String) {

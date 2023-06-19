@@ -1,11 +1,17 @@
 package ru.netology.nmedia.repository
 
+import android.content.Context
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.Api
+import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.Media
@@ -18,15 +24,29 @@ import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.model.PhotoModel
 import ru.netology.nmedia.types.AttachmentType
 import java.io.IOException
+import javax.inject.Inject
 
-class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
+class PostRepositoryImpl @Inject constructor(
+    private val postDao: PostDao,
+    @ApplicationContext
+    private val context: Context
+) : PostRepository {
     override val data: Flow<List<Post>> =
         postDao.getAll().map { it.map(PostEntity::toDto) }
+
+    @InstallIn(SingletonComponent::class)
+    @EntryPoint
+    interface RepositoryEntryPoint {
+        fun getApiService(): ApiService
+    }
+
+    private val entryPoint =
+        EntryPointAccessors.fromApplication(context, RepositoryEntryPoint::class.java)
 
     override fun getNewer(id: Long): Flow<Int> = flow {
         while (true) {
             delay(10_000L)
-            val response = Api.service.getNewer(id)
+            val response = entryPoint.getApiService().getNewer(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -40,7 +60,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         .flowOn(Dispatchers.Default)
 
     override suspend fun getAll() {
-        val response = Api.service.getAll()
+        val response = entryPoint.getApiService().getAll()
         if (!response.isSuccessful) {
             throw RuntimeException(response.message())
         }
@@ -49,7 +69,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     }
 
     override suspend fun getAllVisible() {
-        val response = Api.service.getAll()
+        val response = entryPoint.getApiService().getAll()
         if (!response.isSuccessful) {
             throw RuntimeException(response.message())
         }
@@ -73,8 +93,8 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         try {
             val liked = postDao.getById(id).likedByMe
             val response =
-                if (liked) Api.service.unlikeById(id)
-                else Api.service.likeById(id)
+                if (liked) entryPoint.getApiService().unlikeById(id)
+                else entryPoint.getApiService().likeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -94,7 +114,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
 
     override suspend fun save(post: Post) {
         try {
-            val response = Api.service.save(post)
+            val response = entryPoint.getApiService().save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -114,7 +134,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         try {
             val media = uploadMedia(model)
 
-            val response = Api.service.save(
+            val response = entryPoint.getApiService().save(
                 post.copy(
                     attachment =
                     Attachment(
@@ -137,7 +157,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     }
 
     private suspend fun uploadMedia(model: PhotoModel): Media {
-        val response = Api.service.uploadMedia(
+        val response = entryPoint.getApiService().uploadMedia(
             MultipartBody.Part.createFormData("file", "file", model.file.asRequestBody())
         )
 
@@ -151,7 +171,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     override suspend fun removeById(id: Long) {
         try {
             postDao.removeById(id)
-            val response = Api.service.removeById(id)
+            val response = entryPoint.getApiService().removeById(id)
             if (!response.isSuccessful) {
                 throw RuntimeException(response.message())
             }

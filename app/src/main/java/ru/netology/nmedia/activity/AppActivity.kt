@@ -16,13 +16,21 @@ import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.ActivityAppBinding
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var appAuth: AppAuth
+    @Inject
+    lateinit var googleApiAvailability: GoogleApiAvailability
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAppBinding.inflate(layoutInflater)
@@ -92,7 +100,7 @@ class AppActivity : AppCompatActivity() {
                         }
 
                         R.id.sign_out -> {
-                            AppAuth.getInstance().clearAuth()
+                            appAuth.clearAuth()
                             true
                         }
 
@@ -106,7 +114,7 @@ class AppActivity : AppCompatActivity() {
     }
 
     private fun checkGoogleApiAvailability() {
-        with(GoogleApiAvailability.getInstance()) {
+        with(googleApiAvailability) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS) {
                 return@with

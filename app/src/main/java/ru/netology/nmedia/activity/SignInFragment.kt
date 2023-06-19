@@ -10,20 +10,18 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.databinding.FragmentSignInBinding
 import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.viewmodel.PostViewModel
 import ru.netology.nmedia.viewmodel.SignInViewModel
 
+@AndroidEntryPoint
 class SignInFragment: Fragment() {
 
-    private val viewModel: SignInViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: SignInViewModel by viewModels()
 
-    private val postViewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val postViewModel: PostViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import androidx.recyclerview.widget.RecyclerView.VISIBLE
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
@@ -24,15 +25,12 @@ import ru.netology.nmedia.utils.AuthReminder
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
 
-    val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    val viewModel: PostViewModel by viewModels()
 
-    val authViewModel: AuthViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
