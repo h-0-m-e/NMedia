@@ -1,5 +1,6 @@
 package ru.netology.nmedia.api
 
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -8,29 +9,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
+import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PushToken
+import ru.netology.nmedia.dto.Token
 import java.util.concurrent.TimeUnit
 
-private const val BASE_URL = "${BuildConfig.BASE_URL}api/slow/"
-
-private val client = OkHttpClient.Builder()
-    .connectTimeout(30,TimeUnit.SECONDS)
-    .run {
-        if(BuildConfig.DEBUG){
-            this.addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-        } else {this}
-    }
-    .build()
-
-private val retrofit = Retrofit.Builder()
-    .baseUrl(BASE_URL)
-    .client(client)
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-
-interface PostApiService {
+interface ApiService {
 
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
@@ -49,8 +35,15 @@ interface PostApiService {
 
     @DELETE("posts/{id}/likes")
     suspend fun unlikeById(@Path("id") id: Long): Response<Post>
-}
 
-object PostApi{
-    val service: PostApiService by lazy {retrofit.create()}
+    @Multipart
+    @POST("media")
+    suspend fun uploadMedia(@Part file: MultipartBody.Part): Response<Media>
+
+    @FormUrlEncoded
+    @POST("users/authentication")
+    suspend fun updateUser(@Field("login") login: String, @Field("pass") pass: String): Response<Token>
+
+    @POST("users/push-tokens")
+    suspend fun sendPushToken(@Body token: PushToken): Response<Unit>
 }

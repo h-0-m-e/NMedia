@@ -16,4 +16,16 @@
     <string name="empty_posts">Здесь пока ничего нет :(</string>
     <string name="error">Упс, что-то пошло не так :( . Обновите или попробуйте снова.</string>
     <string name="retry">Повторить</string>
+    <string name="clear">Убрать</string>
+    <string name="picker_error">Ошибка при выборе фото</string>
+    <string name="save">Сохранить</string>
+    <string name="back">Назад</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_out">Выйти</string>
+    <string name="sign_in_error">Пользователь не найден или пароль/логин неверен</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="empty_fields">Поля не могут быть пустыми</string>
+    <string name="chooser_play_video">Воспроизвести</string>
 </resources>

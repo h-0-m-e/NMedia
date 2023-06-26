@@ -1,14 +1,11 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
-
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
@@ -43,9 +40,6 @@ class PostViewHolder(
 
     fun bind(post: Post) {
         binding.apply {
-            postAvatar.loadCircle("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
-            attachment.load("${BuildConfig.BASE_URL}/images/${post.attachment?.url}")
-            attachment.isVisible = !post.attachment?.url.isNullOrBlank()
             nickname.text = post.author
             published.text = post.published
             postText.text = post.content
@@ -54,10 +48,17 @@ class PostViewHolder(
             share.isChecked = post.sharedByMe
             like.text = countOperator.shortingByLetters(post.likes)
             like.isChecked = post.likedByMe
+            postAvatar.loadCircle("${BuildConfig.BASE_URL}avatars/${post.authorAvatar}")
+            attachment.load("${BuildConfig.BASE_URL}media/${post.attachment?.url}")
+            attachment.isVisible = !post.attachment?.url.isNullOrBlank()
             videoGroup.isVisible = !post.video.isNullOrEmpty()
 
             videoPreview.setOnClickListener {
                 onInteractionListener.onPlayVideo(post)
+            }
+
+            attachment.setOnClickListener {
+                onInteractionListener.onShowAttachment(post)
             }
 
             playVideo.setOnClickListener {
@@ -65,11 +66,15 @@ class PostViewHolder(
             }
 
             like.setOnClickListener {
-                onInteractionListener.onLike(post)
+                    onInteractionListener.onLike(post)
             }
+
             share.setOnClickListener {
-                onInteractionListener.onShare(post)
+                    onInteractionListener.onShare(post)
             }
+
+            menu.isVisible = post.ownedByMe
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)

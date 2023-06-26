@@ -26,30 +26,36 @@ interface PostDao {
     suspend fun removeById(id: Long)
 
     @Query("SELECT * FROM PostEntity WHERE id = :id")
-    suspend fun getById(id: Long) : PostEntity
+    suspend fun getById(id: Long): PostEntity
 
-    @Query("""
+    @Query(
+        """
         UPDATE PostEntity SET
         likes = likes + 1,
         likedByMe = 1
         WHERE id = :id
-        """)
+        """
+    )
     suspend fun likeById(id: Long)
 
-    @Query("""
+    @Query(
+        """
         UPDATE PostEntity SET
         likes = likes - 1,
         likedByMe = 0
         WHERE id = :id
-        """)
+        """
+    )
     suspend fun unlikeById(id: Long)
 
-    @Query("""
+    @Query(
+        """
         UPDATE PostEntity SET
         shares = shares + 1,
         sharedByMe = 1
         WHERE id = :id
-        """)
+        """
+    )
     suspend fun shareById(id: Long)
 
     @Query("UPDATE PostEntity SET hidden = 0 WHERE hidden = 1")
@@ -62,6 +68,7 @@ interface PostDao {
 class Converters {
     @TypeConverter
     fun toAttachmentType(value: String) = enumValueOf<AttachmentType>(value)
+
     @TypeConverter
     fun fromAttachmentType(value: AttachmentType) = value.name
 }

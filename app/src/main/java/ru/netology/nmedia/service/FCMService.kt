@@ -1,24 +1,37 @@
 package ru.netology.nmedia.service
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
 import ru.netology.nmedia.R
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.service.actions.Action
 import ru.netology.nmedia.service.actions.Like
 import ru.netology.nmedia.service.actions.NewPost
+import javax.inject.Inject
 import kotlin.random.Random
 
+@AndroidEntryPoint
 class FCMService : FirebaseMessagingService() {
-    private val action = "action"
-    private val content = "content"
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
     private val channelId = "remote"
     private val gson = Gson()
+    private val pushStub by lazy {
+        getString(R.string.new_notification)
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -33,15 +46,28 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
+        val authId = appAuth.data.value?.id
         try {
-            message.data[action]?.let {
-                when (Action.valueOf(it)) {
-                    Action.LIKE -> handleLike(
-                        gson.fromJson(message.data[content], Like::class.java)
-                    )
-                    Action.NEWPOST -> handleNewPost(
-                        gson.fromJson(message.data[content], NewPost::class.java)
-                    )
+            if (message.data["action"] == null) {
+                val pushJson = message.data.values.firstOrNull()?.let { JSONObject(it) }
+                val recipientId: String? = pushJson?.optString("recipientId")
+                val content: String = pushJson?.optString("content") ?: pushStub
+                println("..........................................")
+                    when(recipientId){
+                        "null", authId.toString() -> handlePush(content)
+                        "0" -> appAuth.sendPushToken()
+                        else -> appAuth.sendPushToken()
+                    }
+            } else {
+                message.data["action"]?.let {
+                    when (Action.valueOf(it)) {
+                        Action.LIKE -> handleLike(
+                            gson.fromJson(message.data["content"], Like::class.java)
+                        )
+                        Action.NEWPOST -> handleNewPost(
+                            gson.fromJson(message.data["content"], NewPost::class.java)
+                        )
+                    }
                 }
             }
         } catch (e: java.lang.IllegalArgumentException) {
@@ -50,7 +76,33 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        println(token)
+        appAuth.sendPushToken(token)
+    }
+
+    private fun handlePush(content: String) {
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(content)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        NotificationManagerCompat.from(this)
+            .notify(Random.nextInt(100_000), notification)
     }
 
     private fun handleLike(content: Like) {
@@ -66,6 +118,20 @@ class FCMService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }
@@ -77,7 +143,8 @@ class FCMService : FirebaseMessagingService() {
                 getString(
                     R.string.notification_new_post,
                     content.userName,
-            ))
+                )
+            )
             .setContentText(content.content)
             .setStyle(
                 NotificationCompat.BigTextStyle()
@@ -86,6 +153,20 @@ class FCMService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }
@@ -106,6 +187,20 @@ class FCMService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }

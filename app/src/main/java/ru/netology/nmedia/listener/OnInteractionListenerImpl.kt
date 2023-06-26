@@ -10,11 +10,11 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 open class OnInteractionListenerImpl(
     private val context: Context,
-    private val viewModel: PostViewModel
+    private val viewModel: PostViewModel,
 ) : OnInteractionListener {
 
     override fun onLike(post: Post) {
-        viewModel.likeById(post)
+            viewModel.likeById(post)
     }
 
     override fun onShare(post: Post) {
@@ -27,13 +27,13 @@ open class OnInteractionListenerImpl(
         val shareIntent =
             Intent.createChooser(intent, context.getString(R.string.chooser_share_post))
         context.startActivity(shareIntent)
-        viewModel.shareById(post.id)
+       // viewModel.shareById(post.id)
     }
 
     override fun onPlayVideo(post: Post) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
         val playIntent =
-            Intent.createChooser(intent, context.getString(R.string.chooser_share_post))
+            Intent.createChooser(intent, context.getString(R.string.chooser_play_video))
         context.startActivity(playIntent)
     }
 
